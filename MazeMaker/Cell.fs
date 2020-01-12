@@ -12,10 +12,16 @@ type NeighborOrLink =
 
 type Coord = int * int
 let locX (c: Coord): int = 
+    snd c
+
+let col (c: Coord): int = 
+    snd c
+
+let row (c: Coord): int =
     fst c
 
 let locY (c: Coord): int = 
-    snd c
+    fst c
 
 type Cell = {
     loc : Coord;
@@ -50,8 +56,21 @@ let private directionChecker (c: Cell) (d: Direction) = // 0,0 is the top left (
         | West -> List.exists (fun n -> (locX c.loc) - 1 = locX n && locY c.loc = locY n)
 
 let hasNeighbor (c: Cell) (d:Direction) = c.neighbors |> directionChecker c d
+    //match d with 
+    //    | North -> List.exists (fun n -> locX n = locX c.loc && locY n = (locY c.loc) - 1) c.neighbors
+    //    | East -> List.exists (fun n -> (locX c.loc) + 1 = locX n && locY c.loc = locY n) c.neighbors
+    //    | South -> List.exists (fun n -> locX c.loc = locX n && locY n = (locY c.loc) + 1) c.neighbors
+    //    | West -> List.exists (fun n -> (locX c.loc) - 1 = locX n && locY c.loc = locY n) c.neighbors
+
     
 let hasLink (c: Cell) (d:Direction) = c.links |> directionChecker c d
+    //match d with 
+    //    | North -> List.exists (fun n -> locX n = locX c.loc && locY n = (locY c.loc) - 1) c.links
+    //    | East -> List.exists (fun n -> (locX c.loc) + 1 = locX n && locY c.loc = locY n) c.links
+    //    | South -> List.exists (fun n -> locX c.loc = locX n && locY n = (locY c.loc) + 1) c.links
+    //    | West -> List.exists (fun n -> (locX c.loc) - 1 = locX n && locY c.loc = locY n) c.links
+
+
 
 let isLinked (this: Cell) (that: Cell) = this.links |> List.exists (fun c -> c = that.loc)
     

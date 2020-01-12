@@ -6,20 +6,22 @@ type Grid = { height: int;
               width: int; 
               cells: Cell [,] }
 
-let makeEmptyGrid c r = { height = r;
+let R = System.Random()
+
+let makeEmptyGrid r c = { height = r;
                           width = c;
-                          cells = Array2D.init c r (fun i j -> makeCell (i,j)) }
+                          cells = Array2D.init r c (fun i j -> makeCell (i,j)) }
 
 let getCell (g: Grid) (c: Coord): Cell = g.cells.[(fst c),(snd c)]
 
 let tryGetCell (g: Grid) (p: Coord): Cell option = 
-    let r = fst p
-    let c = snd p
+    let r = row p
+    let c = col p
     if r < 0 || c < 0 || r >= g.height || c >= g.width then None
     else Some(g.cells.[r,c])
 
-let buildSimpleGrid col row : Grid = 
-    let g = makeEmptyGrid col row
+let makeSimpleGrid row col: Grid = 
+    let g = makeEmptyGrid row col 
     for c in [|0..col-1|] do
         for r in [|0..row-1|] do
             let nns = [(r - 1, c); (r, c + 1); (r + 1, c); (r, c - 1)] // [Above/N; Right/E; Below/S; Left/W]
@@ -31,14 +33,13 @@ let getRow (g: Grid) (r: int): Cell[] = g.cells.[r, *]
 let size (g:Grid) : int = g.height * g.width
 
 let randomCell (g:Grid) : Cell = 
-    let R = System.Random()
-    let r = R.Next(0, g.height - 1)
-    let c = R.Next(0, g.width - 1)
+    let r = R.Next(0, g.height)
+    let c = R.Next(0, g.width)
     g.cells.[r,c]
 
 let printGrid (g: Grid): string = 
     let output:StringBuilder = StringBuilder ("+" + (String.replicate g.width "---+") + "\n")
-    for i in [0..g.width - 1] do
+    for i in [0..g.height - 1] do
         let row = getRow g i
         let top = "|"
         let bottom = "+"
