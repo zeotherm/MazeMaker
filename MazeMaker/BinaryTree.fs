@@ -11,8 +11,7 @@ let makeBinaryTreeMaze height width  =
         for r in [|0..height-1|] do
             let nns = [(r - 1, c); (r, c + 1)] // [Above/N; Right/E]
             for pcell in nns |> List.map (tryGetCell g) do g.cells.[r,c] <- pcell |> addNeighbor g.cells.[r,c]
-            let occ = g.cells.[r,c].neighbors |> List.tryItem (R.Next(g.cells.[r,c].neighbors.Length))
-            match occ with 
+            match randomNeighbor g.cells.[r,c] with 
             | Some(oc) -> g.cells.[r,c] <- addLink g.cells.[r,c] g.cells.[row oc, col oc]
                           g.cells.[row oc, col oc] <- addLink g.cells.[row oc, col oc] g.cells.[r, c]
             | None -> ()

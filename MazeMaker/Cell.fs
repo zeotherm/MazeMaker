@@ -1,5 +1,7 @@
 ﻿module Cell
 
+let R = System.Random()
+
 type Direction =
     | North 
     | East
@@ -51,5 +53,7 @@ let hasNeighbor (c: Cell) (d:Direction) = c.neighbors |> directionChecker c d
 let hasLink (c: Cell) (d:Direction) = c.links |> directionChecker c d
 
 let isLinked (this: Cell) (that: Cell) = this.links |> List.exists (fun c -> c = that.loc)
+
+let randomNeighbor (c: Cell) : Coord option = c.neighbors |> List.tryItem (R.Next(c.neighbors.Length))
     
 
