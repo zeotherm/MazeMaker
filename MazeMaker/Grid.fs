@@ -12,7 +12,7 @@ let makeEmptyGrid r c = { height = r;
                           width = c;
                           cells = Array2D.init r c (fun i j -> makeCell (i,j)) }
 
-let getCell (g: Grid) (c: Coord): Cell = g.cells.[(fst c),(snd c)]
+let getCell (g: Grid) (c: Coord): Cell = g.cells.[(row c),(col c)]
 
 let tryGetCell (g: Grid) (p: Coord): Cell option = 
     let r = row p

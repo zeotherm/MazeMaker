@@ -3,8 +3,6 @@
 open Grid
 open Cell
 
-let R = System.Random()
-
 let makeBinaryTreeMaze height width  = 
     let g = makeEmptyGrid height width 
     for c in [|0..width-1|] do

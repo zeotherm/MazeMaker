@@ -47,9 +47,11 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GarbageFile.fs" />
+    <Compile Include="Utils.fs" />
     <Compile Include="Cell.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="BinaryTree.fs" />
+    <Compile Include="Sidewinder.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
     <Compile Include="Program.fs" />
