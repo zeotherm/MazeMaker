@@ -20,14 +20,12 @@ let makeSidewinderMaze height width  =
                 match sample augRun with
                 | Some(m) -> let (m_r, m_c) = (row m, col m)
                              if hasNeighbor g.cells.[m_r, m_c] North then
-                                g.cells.[m_r,m_c] <- addLink g.cells.[m_r,m_c] g.cells.[m_r-1,m_c]
-                                g.cells.[m_r-1,m_c] <- addLink g.cells.[m_r-1,m_c] g.cells.[m_r,m_c]
+                                linkCells g g.cells.[m_r, m_c] g.cells.[m_r-1, m_c]
                 | None -> failwith "Should never reach here, something has gone wrong"
                 aux (r, c+1) l []
             else 
                 // Link to eastern cell (r, c+1)
-                g.cells.[r,c] <- addLink g.cells.[r,c] g.cells.[r,c + 1]
-                g.cells.[r,c+1] <- addLink g.cells.[r,c+1] g.cells.[r,c]
+                linkCells g g.cells.[r, c] g.cells.[r, c + 1]
                 aux (r, c+1) l augRun
         else
             ()

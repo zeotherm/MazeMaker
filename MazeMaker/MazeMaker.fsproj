@@ -55,6 +55,7 @@
     <None Include="App.config" />
     <Content Include="packages.config" />
     <Compile Include="Program.fs" />
+    <Compile Include="GraphGrid.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">

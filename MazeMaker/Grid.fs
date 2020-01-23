@@ -37,6 +37,13 @@ let randomCell (g:Grid) : Cell =
     let c = R.Next(0, g.width)
     g.cells.[r,c]
 
+let linkCells (g:Grid) (this: Cell) (that: Cell) =
+    let (this_r, this_c) = (row this.loc, col this.loc)
+    let (that_r, that_c) = (row that.loc, col that.loc)
+    g.cells.[this_r,this_c] <- addLink g.cells.[this_r,this_c] g.cells.[that_r,that_c]
+    g.cells.[that_r,that_c] <- addLink g.cells.[that_r,that_c] g.cells.[this_r,this_c]
+    ()
+
 let printGrid (g: Grid): string = 
     let output:StringBuilder = StringBuilder ("+" + (String.replicate g.width "---+") + "\n")
     for i in [0..g.height - 1] do
