@@ -65,6 +65,11 @@ let linkCell (g:SquareGrid) (c:Coord) (d:Direction): SquareGrid =
 let getRow (g: SquareGrid) (r: int): Cell list = 
     (List.filter (fun c -> row (coord c) = r) >> List.sortBy (fun c -> col (coord c))) g
 
+let getRows (g: SquareGrid) : (int * Cell list) list = 
+    let gs = List.groupBy (fun c -> row (coord c)) g
+    let gss = List.map (fun (i, row) -> (i, List.sortBy (fun c -> col (coord c)) row)) gs
+    List.sortBy fst gss
+
 let height (g:SquareGrid): int = 
     g |> List.map coord |> List.map row |> List.max
 
@@ -72,22 +77,19 @@ let width (g:SquareGrid): int =
     g |> List.map coord |> List.map col |> List.max
 
 let printGrid (g: SquareGrid): string = 
-    let (height, width) = (height g, width g)
-    let output:StringBuilder = StringBuilder ("+" + (String.replicate width "---+") + "\n")
-    for i in [0..height ] do
-        let row = getRow g i
-        let top = "|"
-        let bottom = "+"
-        let topLine = new StringBuilder(top)
-        let bottomLine = new StringBuilder(bottom)
-        for j in [0..row.Length - 1] do
-            let c = List.item j row 
-            let body = "   "
+    let output:StringBuilder = StringBuilder ("\n+" + (String.replicate ((width g)+1) "---+") + "\n")
+    let body = "   "
+    let corner = "+"
+    List.map snd (getRows g) |> List.iter (fun row ->
+        let topLine = new StringBuilder("|")
+        let bottomLine = new StringBuilder("+")
+        List.iter (fun c ->
             let east_boundary = if List.contains East (links c)  then " " else "|"
             let south_boundary = if List.contains South (links c) then "   " else "---"
-            let corner = "+"
             topLine.Append(body + east_boundary) |> ignore
             bottomLine.Append(south_boundary + corner) |> ignore
+        ) row             
         output.AppendLine(topLine.ToString()) |> ignore
         output.AppendLine(bottomLine.ToString()) |> ignore
+    )
     output.ToString()
