@@ -1,17 +1,24 @@
 ﻿module BinaryTree
 
-open Grid
-open Cell
+open ListGrid
+open Utils
 
-let makeBinaryTreeMaze height width  = 
-    let g = makeEmptyGrid height width 
-    for c in [|0..width-1|] do
-        for r in [|0..height-1|] do
-            let nns = [(r - 1, c); (r, c + 1)] // [Above/N; Right/E]
-            for pcell in nns |> List.map (tryGetCell g) do g.cells.[r,c] <- pcell |> addNeighbor g.cells.[r,c]
-            match randomNeighbor g.cells.[r,c] with 
-            | Some(oc) -> linkCells g g.cells.[r,c] g.cells.[row oc, col oc]
-            | None -> ()
-    g
+let makeBinaryTreeMaze height width = 
+    let g = makeGrid height width
+    let dirs = [North; East]
+    let binaryTreeOp (c:Cell): SquareGrid -> SquareGrid =
+        let neighbors = validNeighbors g (coord c) dirs
+        let other = sampleOpt neighbors
+        match other with 
+        | Some(o) -> linkCellOp g (coord c) o
+        | None -> id
+    
+    let transforms = List.map binaryTreeOp g 
+
+    List.fold (fun grid xform -> xform grid) g transforms
+
+
+
+
 
 

@@ -65,6 +65,6 @@ let hasLink (c: Cell) (d:Direction) = c.links |> directionChecker c d
 
 let isLinked (this: Cell) (that: Cell) = this.links |> List.exists (fun c -> c = that.loc)
 
-let randomNeighbor (c: Cell) : Coord option = c.neighbors |> sample
+let randomNeighbor (c: Cell) : Coord option = c.neighbors |> sampleOpt
     
 

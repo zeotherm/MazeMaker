@@ -1,7 +1,7 @@
 ﻿// Learn more about F# at http://fsharp.org
 // See the 'F# Tutorial' project for more help.
 
-open Grid
+open ListGrid
 open System
 open System.Drawing
 open System.IO
@@ -19,7 +19,7 @@ let drawSquare () =
 
 [<EntryPoint>]
 let main argv = 
-    let maze = makeSimpleGrid 4 6 
+    let maze = makeGrid 4 6 
     
     printfn "%s" (printGrid maze)
 
@@ -27,9 +27,9 @@ let main argv =
 
     printGrid binTreeMaze |> printfn "%s"
 
-    let sidewinderMaze = makeSidewinderMaze 12 12
+    //let sidewinderMaze = makeSidewinderMaze 12 12
 
-    printGrid sidewinderMaze |> printfn "%s"
+    //printGrid sidewinderMaze |> printfn "%s"
 
     Console.ReadLine() |> ignore
 

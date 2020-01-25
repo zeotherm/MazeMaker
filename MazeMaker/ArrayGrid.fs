@@ -1,4 +1,4 @@
-﻿module Grid
+﻿module ArrayGrid
 open Cell
 open System.Text
 

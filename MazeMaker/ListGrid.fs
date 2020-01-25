@@ -1,4 +1,4 @@
-﻿module GraphGrid
+﻿module ListGrid
 
 open System.Text
 
@@ -39,6 +39,13 @@ let movement d : Movement =
     | South -> (1, 0)  // move Down one Row
     | West -> (0, -1)  // move Left one Column
 
+let opposite d: Direction = 
+    match d with 
+    | North -> South
+    | East -> West
+    | South -> North
+    | West -> East
+
 let move (c:Coord) (m: Movement): Coord = 
     (row c + fst m, col c + snd m)
 
@@ -48,12 +55,8 @@ let containsCoord (g:SquareGrid) (c:Coord): bool =
 let getCell (g:SquareGrid) (c:Coord): Cell option =
     List.tryFind (fun e -> coord e = c) g
 
-let opposite d: Direction = 
-    match d with 
-    | North -> South
-    | East -> West
-    | South -> North
-    | West -> East
+let validNeighbors (g:SquareGrid) (c:Coord) (ds: Direction list): Direction list =
+    List.filter (fun d -> containsCoord g (move c (movement d)))  ds
 
 let linkCell (g:SquareGrid) (c:Coord) (d:Direction): SquareGrid = 
     match (getCell g c, movement d |> move c |> getCell g) with
@@ -61,6 +64,13 @@ let linkCell (g:SquareGrid) (c:Coord) (d:Direction): SquareGrid =
                                     let linkb = List.map (fun cell -> if coord cell = coord conn then addLink cell (opposite d) else cell)
                                     g |> (linkf >> linkb)
         | _, _ -> g
+
+let linkCellOp (g:SquareGrid) (c:Coord) (d:Direction) : SquareGrid -> SquareGrid = 
+    match (getCell g c, movement d |> move c |> getCell g) with
+        | Some(orig), Some(conn) -> let linkf = List.map (fun cell -> if coord cell = coord orig then addLink cell d else cell) 
+                                    let linkb = List.map (fun cell -> if coord cell = coord conn then addLink cell (opposite d) else cell)
+                                    linkf >> linkb
+        | _, _ -> id
 
 let getRow (g: SquareGrid) (r: int): Cell list = 
     (List.filter (fun c -> row (coord c) = r) >> List.sortBy (fun c -> col (coord c))) g
