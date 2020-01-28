@@ -79,14 +79,15 @@ let getRows (g: SquareGrid) : (int * Cell list) list =
     let gss = List.map (fun (i, row) -> (i, List.sortBy (fun c -> col (coord c)) row)) gs
     List.sortBy fst gss
 
-let height (g:SquareGrid): int = 
-    g |> List.map coord |> List.map row |> List.max
+let private maxByCellParam (g: SquareGrid) (f : Coord -> int): int =
+    List.maxBy (coord >> f) g |> (coord >> f)
 
-let width (g:SquareGrid): int = 
-    g |> List.map coord |> List.map col |> List.max
+let height (g:SquareGrid): int = maxByCellParam g row
+
+let width (g:SquareGrid): int = maxByCellParam g col
 
 let printGrid (g: SquareGrid): string = 
-    let output:StringBuilder = StringBuilder ("\n+" + (String.replicate ((width g)+1) "---+") + "\n")
+    let output = StringBuilder ("\n+" + (String.replicate ((width g)+1) "---+") + "\n")
     let body = "   "
     let corner = "+"
     List.map snd (getRows g) |> List.iter (fun row ->

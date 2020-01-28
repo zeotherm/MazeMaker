@@ -4,7 +4,6 @@
 open ListGrid
 open System
 open System.Drawing
-open System.IO
 open BinaryTree
 open Sidewinder
 
