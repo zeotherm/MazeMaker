@@ -27,9 +27,9 @@ let main argv =
 
     printGrid binTreeMaze |> printfn "%s"
 
-    //let sidewinderMaze = makeSidewinderMaze 12 12
+    let sidewinderMaze = makeSidewinderMaze 20 20
 
-    //printGrid sidewinderMaze |> printfn "%s"
+    printGrid sidewinderMaze |> printfn "%s"
 
     Console.ReadLine() |> ignore
 

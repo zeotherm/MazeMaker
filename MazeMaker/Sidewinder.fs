@@ -1,37 +1,35 @@
 ﻿module Sidewinder
 
-//open Grid
-//open Cell
-//open Utils
+open Utils
+open ListGrid
 
-//let makeSidewinderMaze height width  = 
-//    let g = makeSimpleGrid height width 
-    
-//    let rec aux (coord: Coord) (l: int) (run: Coord list) =
-//        let (r, c) = (row coord, col coord)
-//        if c < l then
-//            let cell = g.cells.[r,c]
-//            let augRun = (r,c) :: run
-//            let atEasternBoundary = not (hasNeighbor cell East)
-//            let atNorthernBoundary = not (hasNeighbor cell North)
-//            let shouldCloseOut = atEasternBoundary || (not atNorthernBoundary && R.Next(2) = 0)
-//            if shouldCloseOut then
-//                // sample from run and if it has a northern neighbor, link it
-//                match sample augRun with
-//                | Some(m) -> let (m_r, m_c) = (row m, col m)
-//                             if hasNeighbor g.cells.[m_r, m_c] North then
-//                                linkCells g g.cells.[m_r, m_c] g.cells.[m_r-1, m_c]
-//                | None -> failwith "Should never reach here, something has gone wrong"
-//                aux (r, c+1) l []
-//            else 
-//                // Link to eastern cell (r, c+1)
-//                linkCells g g.cells.[r, c] g.cells.[r, c + 1]
-//                aux (r, c+1) l augRun
-//        else
-//            ()
+let makeSidewinderMaze inp_height inp_width = 
+    let g = makeGrid inp_height inp_width
+    let rec colProcess (m: SquareGrid) (loc: Coord) (l: int) (run: Coord list): SquareGrid = 
+        let (r, c) = (row loc, col loc)
+        if c <= l then
+            let cell = getCell m loc
+            let augRun = (r, c) :: run
+            let ns = validNeighbors m loc [North; East]
+            let atEasternBoundary = not (List.contains East ns)
+            let atNorthernBoundary = not (List.contains North ns)
+            if atEasternBoundary || (not atNorthernBoundary && sample [true; false]) then
+                let randCoord = sample augRun
+                if hasNeighbor g randCoord North then
+                    colProcess (linkCell m randCoord North) (r, c+1) l []
+                else
+                    colProcess m (r, c+1) l []
+            else
+                colProcess (linkCell m (coord cell.Value) East) (r, c+1) l augRun
+        else
+            m
+    let rec rowProcess (m: SquareGrid) (rowNum: int): SquareGrid =
+        let h = height m
+        if rowNum > h then
+            m
+        else
+            rowProcess (colProcess m (rowNum, 0) (width m) []) (rowNum + 1)
 
-//    for r in [|0..height-1|] do
-//        let row = getRow g r
-//        aux (r, 0) row.Length []
-//    g
-
+    rowProcess g 0
+                    
+                

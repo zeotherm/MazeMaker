@@ -10,7 +10,7 @@ type Direction =
 
 type Coord = int * int
 
-type Movement = int*int
+type Movement = int * int
 
 type Cell = Coord * Direction list
 
@@ -58,12 +58,8 @@ let getCell (g:SquareGrid) (c:Coord): Cell option =
 let validNeighbors (g:SquareGrid) (c:Coord) (ds: Direction list): Direction list =
     List.filter (fun d -> containsCoord g (move c (movement d)))  ds
 
-let linkCell (g:SquareGrid) (c:Coord) (d:Direction): SquareGrid = 
-    match (getCell g c, movement d |> move c |> getCell g) with
-        | Some(orig), Some(conn) -> let linkf = List.map (fun cell -> if coord cell = coord orig then addLink cell d else cell) 
-                                    let linkb = List.map (fun cell -> if coord cell = coord conn then addLink cell (opposite d) else cell)
-                                    g |> (linkf >> linkb)
-        | _, _ -> g
+let hasNeighbor (g: SquareGrid) (c: Coord) (d: Direction): bool = 
+    not (validNeighbors g c [d] |> List.isEmpty)
 
 let linkCellOp (g:SquareGrid) (c:Coord) (d:Direction) : SquareGrid -> SquareGrid = 
     match (getCell g c, movement d |> move c |> getCell g) with
@@ -71,6 +67,9 @@ let linkCellOp (g:SquareGrid) (c:Coord) (d:Direction) : SquareGrid -> SquareGrid
                                     let linkb = List.map (fun cell -> if coord cell = coord conn then addLink cell (opposite d) else cell)
                                     linkf >> linkb
         | _, _ -> id
+
+let linkCell (g:SquareGrid) (c:Coord) (d:Direction): SquareGrid = 
+    g |> linkCellOp g c d
 
 let getRow (g: SquareGrid) (r: int): Cell list = 
     (List.filter (fun c -> row (coord c) = r) >> List.sortBy (fun c -> col (coord c))) g
