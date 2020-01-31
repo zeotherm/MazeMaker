@@ -22,15 +22,6 @@ let toString (g: SquareGrid): string =
     )
     output.ToString()
 
-let drawSquare () = 
-    let bitmap = new Bitmap(16,16)
-    for px in 2..10 do 
-        bitmap.SetPixel(px, 2, Color.Black)
-        bitmap.SetPixel(px, 10, Color.Black)
-        bitmap.SetPixel(2, px, Color.Black)
-        bitmap.SetPixel(10, px, Color.Black)
-    bitmap
-
 let drawHorizontalLine (y: int) (x_b: int) (x_e: int) (c: Color) (b: Bitmap): Unit = 
     for x in x_b .. x_e do
         b.SetPixel(x, y, c)
