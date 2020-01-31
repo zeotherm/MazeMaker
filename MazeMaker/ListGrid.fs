@@ -1,7 +1,5 @@
 ﻿module ListGrid
 
-open System.Text
-
 type Direction =
     | North 
     | East
@@ -22,8 +20,7 @@ let coord (c: Cell): Coord = fst c
 
 let links (c: Cell): Direction list = snd c
 
-let addLink (c: Cell) (d: Direction): Cell = 
-    (coord c, d :: links c)
+let addLink (c: Cell) (d: Direction): Cell = (coord c, d :: links c)
 
 let col (c: Coord): int = snd c
 
@@ -85,21 +82,3 @@ let private maxByCellParam (g: SquareGrid) (f : Coord -> int): int =
 let height (g:SquareGrid): int = maxByCellParam g row
 
 let width (g:SquareGrid): int = maxByCellParam g col
-
-let printGrid (g: SquareGrid): string = 
-    let output = StringBuilder ("\n+" + (String.replicate ((width g)+1) "---+") + "\n")
-    let body = "   "
-    let corner = "+"
-    List.map snd (getRows g) |> List.iter (fun row ->
-        let topLine = new StringBuilder("|")
-        let bottomLine = new StringBuilder("+")
-        List.iter (fun c ->
-            let east_boundary = if List.contains East (links c)  then " " else "|"
-            let south_boundary = if List.contains South (links c) then "   " else "---"
-            topLine.Append(body + east_boundary) |> ignore
-            bottomLine.Append(south_boundary + corner) |> ignore
-        ) row             
-        output.AppendLine(topLine.ToString()) |> ignore
-        output.AppendLine(bottomLine.ToString()) |> ignore
-    )
-    output.ToString()

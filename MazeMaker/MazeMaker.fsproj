@@ -46,11 +46,11 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="GarbageFile.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Cell.fs" />
     <Compile Include="ArrayGrid.fs" />
     <Compile Include="ListGrid.fs" />
+    <Compile Include="Rendering.fs" />
     <Compile Include="BinaryTree.fs" />
     <Compile Include="Sidewinder.fs" />
     <None Include="App.config" />

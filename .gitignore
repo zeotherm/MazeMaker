@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 /MazeMaker/GarbageFile.fs
 /MazeMaker/square.png
+*.png
