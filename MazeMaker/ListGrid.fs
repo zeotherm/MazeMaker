@@ -10,24 +10,32 @@ type Coord = int * int
 
 type Movement = int * int
 
-type Cell = Coord * Direction list
+type Cell = Coord * Direction list * int option
 
 type SquareGrid = Cell list
 
 let emptyDirs: Direction list = []
 
-let coord (c: Cell): Coord = fst c
+let coord (c: Cell): Coord = 
+    let (coord, _, _) = c
+    coord
 
-let links (c: Cell): Direction list = snd c
+let links (c: Cell): Direction list = 
+    let (_, ds, _) = c
+    ds
 
-let addLink (c: Cell) (d: Direction): Cell = (coord c, d :: links c)
+let payload (c: Cell): int option = 
+    let (_, _, p) = c
+    p
+
+let addLink (c: Cell) (d: Direction): Cell = (coord c, d :: links c, payload c)
 
 let col (c: Coord): int = snd c
 
 let row (c: Coord): int = fst c
 
 let makeGrid h w : SquareGrid = 
-    [for r in 0 .. h-1 do for c in 0 .. w-1 -> (r,c)] |> List.map (fun l -> l, emptyDirs)
+    [for r in 0 .. h-1 do for c in 0 .. w-1 -> (r,c)] |> List.map (fun l -> l, emptyDirs, None)
 
 let movement d : Movement = 
     match d with 

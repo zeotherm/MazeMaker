@@ -6,7 +6,6 @@ open System.Drawing
 
 let toString (g: SquareGrid): string = 
     let output = StringBuilder ("\n+" + (String.replicate ((width g)+1) "---+") + "\n")
-    let body = "   "
     let corner = "+"
     List.map snd (getRows g) |> List.iter (fun row ->
         let topLine = new StringBuilder("|")
@@ -14,7 +13,13 @@ let toString (g: SquareGrid): string =
         List.iter (fun c ->
             let east_boundary = if List.contains East (links c)  then " " else "|"
             let south_boundary = if List.contains South (links c) then "   " else "---"
-            topLine.Append(body + east_boundary) |> ignore
+            let bodyval = match (payload c) with
+                          | Some(v) -> if v < 10 then
+                                          " " + string v + " "
+                                       else
+                                          " " + string ((v + 87) |> char) + " "
+                          | None -> "   "
+            topLine.Append(bodyval + east_boundary) |> ignore
             bottomLine.Append(south_boundary + corner) |> ignore
         ) row             
         output.AppendLine(topLine.ToString()) |> ignore
@@ -26,7 +31,7 @@ let drawHorizontalLine (y: int) (x_b: int) (x_e: int) (c: Color) (b: Bitmap): Un
     for x in x_b .. x_e do
         b.SetPixel(x, y, c)
 
-let drawVerticalLine (x: int) (y_b: int) (y_e: int) (c: Color)  (b: Bitmap): Unit = 
+let drawVerticalLine (x: int) (y_b: int) (y_e: int) (c: Color) (b: Bitmap): Unit = 
     for y in y_b .. y_e do
         b.SetPixel(x, y, c)
  
@@ -34,9 +39,9 @@ let cell_size = 20
 
 let toImage (g: SquareGrid): Bitmap = 
     let w = (width g) + 1
-    let bmp_w = w* cell_size + cell_size
+    let bmp_w = w * cell_size + cell_size
     let h = (height g) + 1
-    let bmp_h = h*cell_size + cell_size
+    let bmp_h = h * cell_size + cell_size
     let x_offset = cell_size/2
     let y_offset = cell_size/2
     let wall_color = Color.Black

@@ -19,7 +19,8 @@ let makeMaze alg h w =
 [<EntryPoint>]
 let main argv = 
 
-    let maze, algtype = makeMaze BinaryTree 50 50
+    let maze, algtype = makeMaze Sidewinder 15 15
 
-    (toImage maze).Save(Path.Combine(__SOURCE_DIRECTORY__, "maze_" + algtype + "_" + DateTime.Now.ToString("yyyyMMddHH_mm_ss") + ".png"))
+    printfn "%s" (toString maze)
+    //(toImage maze).Save(Path.Combine(__SOURCE_DIRECTORY__, "maze_" + algtype + "_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") + ".png"))
     0 // return an integer exit code
