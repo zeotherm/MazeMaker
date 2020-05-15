@@ -30,6 +30,8 @@ let payload (c: Cell): int option =
 
 let addLink (c: Cell) (d: Direction): Cell = (coord c, d :: links c, payload c)
 
+let overwritePayload (c: Cell) (p: int option): Cell = (coord c, links c, p)
+
 let col (c: Coord): int = snd c
 
 let row (c: Coord): int = fst c
@@ -62,6 +64,11 @@ let getCell (g:SquareGrid) (c:Coord): Cell option =
 
 let validNeighbors (g:SquareGrid) (c:Coord) (ds: Direction list): Direction list =
     List.filter (fun d -> containsCoord g (move c (movement d)))  ds
+
+let neighboringCoords (g:SquareGrid) (c:Coord): Coord list = 
+    match getCell g c with 
+    | Some(cell) -> (links cell) |> List.map (fun d -> (move c (movement d))) 
+    | None -> []
 
 let hasNeighbor (g: SquareGrid) (c: Coord) (d: Direction): bool = 
     not (validNeighbors g c [d] |> List.isEmpty)

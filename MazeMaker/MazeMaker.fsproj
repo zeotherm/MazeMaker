@@ -50,6 +50,7 @@
     <Compile Include="Cell.fs" />
     <Compile Include="ArrayGrid.fs" />
     <Compile Include="ListGrid.fs" />
+    <Compile Include="Distances.fs" />
     <Compile Include="Rendering.fs" />
     <Compile Include="BinaryTree.fs" />
     <Compile Include="Sidewinder.fs" />

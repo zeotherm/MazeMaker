@@ -1,6 +1,7 @@
 ﻿module Rendering
 
 open ListGrid
+open Utils
 open System.Text
 open System.Drawing
 
@@ -14,10 +15,7 @@ let toString (g: SquareGrid): string =
             let east_boundary = if List.contains East (links c)  then " " else "|"
             let south_boundary = if List.contains South (links c) then "   " else "---"
             let bodyval = match (payload c) with
-                          | Some(v) -> if v < 10 then
-                                          " " + string v + " "
-                                       else
-                                          " " + string ((v + 87) |> char) + " "
+                          | Some(v) -> intToString v
                           | None -> "   "
             topLine.Append(bodyval + east_boundary) |> ignore
             bottomLine.Append(south_boundary + corner) |> ignore
