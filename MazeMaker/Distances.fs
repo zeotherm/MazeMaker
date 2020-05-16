@@ -11,7 +11,7 @@ let computeDistance (g: SquareGrid) (c: Coord): DistMap =
             | Some(_) -> dm
             | None -> dm.Add(c, v)
         match (sampleOpt f) with 
-        | Some(c) -> // add all neighbors of c to d with distance of 1 greater then c, then add all neighbors to frontier
+        | Some(c) ->
             let ns = neighboringCoords g c
             let d' = List.fold (addIfNotPresent (d.Item(c) + 1)) d ns 
             let f' = List.fold (fun (acc:Set<Coord>) (elem: Coord) -> if not (d.ContainsKey(elem)) then 
