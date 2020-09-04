@@ -47,5 +47,24 @@ let findShortestPath (start:Coord) (finish: Coord) (g:SquareGrid): DistMap =
     if Seq.exists (fun c -> (payload c).IsNone) g then
         failwith "Distances have not been fully computed for this maze"
     else
-        let initBreadcrumbs = Map.empty.Add(finish, (getPayloadFromCoord finish))
-        shortestPathAux finish initBreadcrumbs
+        shortestPathAux finish (Map.empty.Add(finish, (getPayloadFromCoord finish)))
+
+let furthestCells (g: SquareGrid): Coord * Coord = 
+    let maxDistanceFrom (c: Coord) (g: SquareGrid): Coord * int = 
+        computeDistance c g |> Map.toSeq |> Seq.maxBy snd
+    
+    let (e, _) = maxDistanceFrom (0,0) g
+    let (s, _) = maxDistanceFrom e g
+    (s, e)
+
+let computeLongestDistance (g:SquareGrid): DistMap =
+    let (s, _) = furthestCells g
+    computeDistance s g
+
+let findLongestPath (g: SquareGrid): DistMap =
+    let (s, e) = furthestCells g
+    let d = computeLongestDistance g
+    let g' = convolute d g
+    findShortestPath s e g'
+
+    
